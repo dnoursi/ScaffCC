@@ -136,15 +136,24 @@ $(FILE)11.ll: $(FILE)10.ll
 		cp $(FILE)10.ll $(FILE)11.ll; \
 	fi
 
+# Insert reverse functions if REVERSE is 1
+$(FILE)12.ll: $(FILE)11.ll
+	@echo "Inserting Reverse Functions..."
+	@if [ $(REVERSE) -eq 1 ]; then \
+		$(OPT) -S -load $(SCAFFOLD_LIB) -FunctionReverse $(FILE)11.ll -o $(FILE)12.ll > /dev/null; \
+	else \
+		cp $(FILE)11.ll $(FILE)12.ll; \
+	fi
+
 # Generate resource counts from final LLVM output
-$(FILE)_res_count.log: $(FILE)11.ll
+$(FILE)_res_count.log: $(FILE)12.ll
 	@echo "Generating $(FILE)_res_count.log..."
-	@$(OPT) -load $(SCAFFOLD_LIB) -ResourceCount $(FILE)11.ll 2> $(FILE)_res_count.log > /dev/null
+	@$(OPT) -load $(SCAFFOLD_LIB) -ResourceCount $(FILE)12.ll 2> $(FILE)_res_count.log > /dev/null
 
 # Generate hierarchical QASM
-$(FILE).qhf: $(FILE)11.ll
+$(FILE).qhf: $(FILE)12.ll
 	@echo "Generating $(FILE).qhf"
-	@$(OPT) -load $(SCAFFOLD_LIB) -gen-qasm $(FILE)11.ll 2> $(FILE).qhf > /dev/null
+	@$(OPT) -load $(SCAFFOLD_LIB) -gen-qasm $(FILE)12.ll 2> $(FILE).qhf > /dev/null
 
 # Translate hierarchical QASM back to C++ for flattening
 $(FILE)_qasm.scaffold: $(FILE).qhf
@@ -162,7 +171,7 @@ $(FILE).qasm: $(FILE)_qasm
 
 # purge cleans temp files
 purge:
-	@rm -f $(FILE)_merged.scaffold $(FILE)_noctqg.scaffold $(FILE).ll $(FILE)1.ll $(FILE)1a.ll $(FILE)1b.ll $(FILE)2.ll $(FILE)3.ll $(FILE)3a.ll $(FILE)4.ll $(FILE)5.ll $(FILE)5a.ll $(FILE)6.ll $(FILE)7.ll $(FILE)8.ll $(FILE)9.ll $(FILE)10.ll $(FILE)11.ll $(FILE)tmp.ll $(FILE)_qasm $(FILE)_qasm.scaffold fdecl.out $(CFILE).ctqg $(CFILE).c $(CFILE).ctqg $(CFILE).qasm $(CFILE).signals $(FILE).tmp sim_$(CFILE) $(FILE).qhf
+	@rm -f $(FILE)_merged.scaffold $(FILE)_noctqg.scaffold $(FILE).ll $(FILE)1.ll $(FILE)1a.ll $(FILE)1b.ll $(FILE)2.ll $(FILE)3.ll $(FILE)3a.ll $(FILE)4.ll $(FILE)5.ll $(FILE)5a.ll $(FILE)6.ll $(FILE)7.ll $(FILE)8.ll $(FILE)9.ll $(FILE)10.ll $(FILE)11.ll $(FILE)12.ll $(FILE)tmp.ll $(FILE)_qasm $(FILE)_qasm.scaffold fdecl.out $(CFILE).ctqg $(CFILE).c $(CFILE).ctqg $(CFILE).qasm $(CFILE).signals $(FILE).tmp sim_$(CFILE) $(FILE).qhf
 
 # clean removes all completed files
 clean: purge

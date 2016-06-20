@@ -99,6 +99,8 @@ UNSIGNED_TYPE(Cbit, CbitTy)
 // 'qbit' in Scaffold (added similar to bool)
 UNSIGNED_TYPE(Qbit, QbitTy)
 
+// 'abit' in Scaffold
+UNSIGNED_TYPE(Abit, AbitTy)
 
 //===- Signed Types -------------------------------------------------------===//
 

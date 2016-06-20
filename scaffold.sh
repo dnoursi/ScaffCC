@@ -31,6 +31,7 @@ force=0
 purge=0
 res=0
 toff=1
+reverse=1
 targets=""
 while getopts "h?cdfFpqrRl:" opt; do
     case "$opt" in
@@ -106,6 +107,6 @@ if [ ${clean} -eq 1 ]; then
     exit
 fi
 #echo make -f $ROOT/scaffold/Scaffold.makefile ${dryrun} ROOT=$ROOT FILENAME=${filename} FILE=${file} CFILE=${cfile} TOFF=${toff} CTQG=${ctqg} ${targets}
-make -f $ROOT/scaffold/Scaffold.makefile ${dryrun} ROOT=$ROOT DIRNAME=${dir} FILENAME=${filename} FILE=${file} CFILE=${cfile} TOFF=${toff} CTQG=${ctqg} ${targets}
+make -f $ROOT/scaffold/Scaffold.makefile ${dryrun} ROOT=$ROOT DIRNAME=${dir} FILENAME=${filename} FILE=${file} CFILE=${cfile} TOFF=${toff} REVERSE=${reverse} CTQG=${ctqg} ${targets}
 
 exit 0

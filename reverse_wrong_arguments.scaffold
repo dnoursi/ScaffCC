@@ -1,0 +1,10 @@
+module A (qbit q1, qbit q2) {
+  CNOT (q1, q2);
+  H(q1);
+}
+int main () {
+  qbit a, b;
+  A(a,b);
+  _reverse_A(a);
+  return 0;
+}

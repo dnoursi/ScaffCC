@@ -248,9 +248,11 @@ bool Declarator::isDeclarationOfFunction() const {
   }
   
   switch (DS.getTypeSpecType()) {
+    case TST_abit:  //Scaffold addition
     case TST_atomic:
     case TST_auto:
     case TST_bool:
+    case TST_cbit:  //Scaffold addition
     case TST_char:
     case TST_char16:
     case TST_char32:
@@ -271,7 +273,6 @@ bool Declarator::isDeclarationOfFunction() const {
     case TST_unspecified:
     case TST_void:
     case TST_wchar:
-    case TST_cbit:	//Scaffold addition
     case TST_qbit:	//Scaffold addition
     case TST_qstruct:
     case TST_qunion:	    
@@ -407,6 +408,7 @@ const char *DeclSpec::getSpecifierName(DeclSpec::TST T) {
   case DeclSpec::TST_error:       return "(error)";
 
   // Scaffold type specifier names
+  case DeclSpec::TST_abit:    return "abit";
   case DeclSpec::TST_cbit:	  return "cbit";
   case DeclSpec::TST_qbit:	  return "qbit";
   case DeclSpec::TST_qstruct:     return "qstruct";

@@ -7612,8 +7612,13 @@ NamedDecl *Sema::ImplicitlyDefineFunction(SourceLocation Loc,
     diag_id = diag::ext_implicit_function_decl;
   else
     diag_id = diag::warn_implicit_function_decl;
-  Diag(Loc, diag_id) << &II;
 
+  //Supress the warning if this is an attempt to reverse a function  
+  if (!II.getName().startswith("_reverse_")) 
+    Diag(Loc, diag_id) << &II;
+
+  if(!II.getName().compare("free"))
+    Diag(Loc, diag_id) << &II;
   // Because typo correction is expensive, only do it if the implicit
   // function declaration is going to be treated as an error.
   if (Diags.getDiagnosticLevel(diag_id, Loc) >= DiagnosticsEngine::Error) {

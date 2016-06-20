@@ -4429,8 +4429,10 @@ QualType ASTReader::GetType(TypeID ID) {
       break;
 
      // Scaffold cbit and qbit types
+    case PREDEF_TYPE_ABIT_ID:       T = Context.AbitTy;     break;
     case PREDEF_TYPE_CBIT_ID:       T = Context.CbitTy;     break;
     case PREDEF_TYPE_QBIT_ID:       T = Context.QbitTy;     break;
+
 
     }
 

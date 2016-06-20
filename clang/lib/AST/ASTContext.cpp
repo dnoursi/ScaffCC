@@ -496,6 +496,7 @@ void ASTContext::InitBuiltinTypes(const TargetInfo &Target) {
   InitBuiltinType(HalfTy, BuiltinType::Half);
 
   // Scaffold: cbit and qbit types added here for initialization
+  InitBuiltinType(AbitTy,               BuiltinType::Abit);
   InitBuiltinType(CbitTy,               BuiltinType::Cbit);
   InitBuiltinType(QbitTy,               BuiltinType::Qbit);
 
@@ -3627,6 +3628,7 @@ unsigned ASTContext::getIntegerRank(const Type *T) const {
   default: llvm_unreachable("getIntegerRank(): not a built-in integer");
    // Bool has lowest integer conversion rank by definition (C99 6.3.1.1)
    // Scaffold will use that rank for cbit and qbit as a result
+  case BuiltinType::Abit:
   case BuiltinType::Cbit:
   case BuiltinType::Qbit:
   case BuiltinType::Bool:

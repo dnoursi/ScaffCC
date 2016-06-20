@@ -140,6 +140,7 @@ def llvm_v4f64_ty      : LLVMType<v4f64>;    //  4 x double
 def llvm_vararg_ty     : LLVMType<isVoid>;   // this means vararg here
 
 // Scaffold
+def llvm_abit_ty      : LLVMType<i128>;
 def llvm_cbit_ty      : LLVMType<i1>;      //  
 def llvm_qbit_ty      : LLVMType<i16>;      //  
 

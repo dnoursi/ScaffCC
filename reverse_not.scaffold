@@ -1,0 +1,8 @@
+#define NOT X
+
+int main () {
+  qbit a;
+  NOT(a);
+  _reverse_NOT(a);
+  return 0;
+}

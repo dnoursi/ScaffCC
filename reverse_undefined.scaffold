@@ -1,0 +1,5 @@
+int main () {
+  qbit a, b;
+  _reverse_B(a,b);
+  return 0;
+}

@@ -1,0 +1,170 @@
+#include<stdio.h>
+void qg_H(char* a){ printf("H %s\n",a); }
+void qg_X(char* a){ printf("X %s\n",a); }
+void qg_Y(char* a){ printf("Y %s\n",a); }
+void qg_Z(char* a){ printf("Z %s\n",a); }
+void qg_S(char* a){ printf("S %s\n",a); }
+void qg_T(char* a){ printf("T %s\n",a); }
+void qg_Tdag(char* a){ printf("Tdag %s\n",a); }
+
+void qg_Sdag(char* a){ printf("S %s\n",a); printf("S %s\n",a); printf("S %s\n",a); }
+
+void qg_CNOT(char* a, char* b){ printf("CNOT %s,%s\n",a,b); }
+
+void qg_Toffoli(char* a, char* b, char* c){ printf("Tof %s,%s,%s\n",a,b,c); }
+void qg_Fredkin(char* a, char* b, char* c){ printf("Fredkin %s,%s,%s\n",a,b,c); }
+
+void qg_PrepX(char* a, int i){ printf("PrepX %s\n",a); if(i==1){ printf("X %s\n",a); } }
+void qg_PrepZ(char* a, int i){ printf("PrepZ %s\n",a); if(i==1){ printf("X %s\n",a); } }
+
+void qg_MeasX(char* a){ printf("MeasX %s\n",a); }
+void qg_MeasZ(char* a){ printf("MeasZ %s\n",a); }
+
+void qg_Rz(char* a, double b){ printf("Rz %s,%f\n",a,b); }
+
+
+module Sqr ( char* * a , char* * b ) {
+ 	qg_CNOT ( b[0] , a[0] );
+ 	qg_CNOT ( b[2] , a[1] );
+ 	qg_CNOT ( b[4] , a[2] );
+ 	qg_CNOT ( b[1] , a[3] );
+ 	qg_CNOT ( b[2] , a[3] );
+ 	qg_CNOT ( b[3] , a[4] );
+ 	qg_CNOT ( b[4] , a[4] );
+ }
+
+module ToffoliImpl ( char*  target , char*  control1 , char*  control2 ) {
+ 	qg_H ( target );
+ 	qg_CNOT ( control2 , target );
+ 	qg_Tdag ( target );
+ 	qg_CNOT ( control1 , target );
+ 	qg_T ( target );
+ 	qg_CNOT ( control2 , target );
+ 	qg_Tdag ( target );
+ 	qg_CNOT ( control1 , target );
+ 	qg_Tdag ( control2 );
+ 	qg_T ( target );
+ 	qg_CNOT ( control1 , control2 );
+ 	qg_H ( target );
+ 	qg_Tdag ( control2 );
+ 	qg_CNOT ( control1 , control2 );
+ 	qg_T ( control1 );
+ 	qg_S ( control2 );
+ }
+
+module EQxMark_IP0_IPx_IPx_IPx_DPx_DPx_DPx_DPx ( char* * b ) {
+char* x[4] = {"x0a","x1a","x2a","x3a"};
+	qg_X ( b[0] );
+ 	qg_X ( b[2] );
+ 	qg_X ( b[3] );
+ 	qg_X ( b[4] );
+ 	qg_PrepZ ( x[0] , 0 );
+ 	qg_PrepZ ( x[1] , 0 );
+ 	qg_PrepZ ( x[2] , 0 );
+ 	qg_PrepZ ( x[3] , 0 );
+ 	ToffoliImpl ( x[0] , b[1] , b[0] );
+ 	ToffoliImpl ( x[1] , x[0] , b[2] );
+ 	ToffoliImpl ( x[2] , x[1] , b[3] );
+ 	ToffoliImpl ( x[3] , x[2] , b[4] );
+ 	qg_Z ( x[3] );
+ 	ToffoliImpl ( x[3] , x[2] , b[4] );
+ 	ToffoliImpl ( x[2] , x[1] , b[3] );
+ 	ToffoliImpl ( x[1] , x[0] , b[2] );
+ 	ToffoliImpl ( x[0] , b[1] , b[0] );
+ 	qg_X ( b[0] );
+ 	qg_X ( b[2] );
+ 	qg_X ( b[3] );
+ 	qg_X ( b[4] );
+ }
+
+module diffuse ( char* * q ) {
+char* x[4] = {"x0a","x1a","x2a","x3a"};
+	qg_H ( q[0] );
+ 	qg_H ( q[1] );
+ 	qg_H ( q[2] );
+ 	qg_H ( q[3] );
+ 	qg_H ( q[4] );
+ 	qg_X ( q[0] );
+ 	qg_X ( q[1] );
+ 	qg_X ( q[2] );
+ 	qg_X ( q[3] );
+ 	qg_X ( q[4] );
+ 	qg_PrepZ ( x[0] , 0 );
+ 	qg_PrepZ ( x[1] , 0 );
+ 	qg_PrepZ ( x[2] , 0 );
+ 	qg_PrepZ ( x[3] , 0 );
+ 	ToffoliImpl ( x[0] , q[1] , q[0] );
+ 	ToffoliImpl ( x[1] , x[0] , q[2] );
+ 	ToffoliImpl ( x[2] , x[1] , q[3] );
+ 	ToffoliImpl ( x[3] , x[2] , q[4] );
+ 	qg_Z ( x[3] );
+ 	ToffoliImpl ( x[3] , x[2] , q[4] );
+ 	ToffoliImpl ( x[2] , x[1] , q[3] );
+ 	ToffoliImpl ( x[1] , x[0] , q[2] );
+ 	ToffoliImpl ( x[0] , q[1] , q[0] );
+ 	qg_X ( q[0] );
+ 	qg_X ( q[1] );
+ 	qg_X ( q[2] );
+ 	qg_X ( q[3] );
+ 	qg_X ( q[4] );
+ 	qg_H ( q[0] );
+ 	qg_H ( q[1] );
+ 	qg_H ( q[2] );
+ 	qg_H ( q[3] );
+ 	qg_H ( q[4] );
+ }
+
+module EQxMark_IP1_IPx_IPx_IPx_DPx_DPx_DPx_DPx ( char* * b , char* * t ) {
+char* x[4] = {"x0a","x1a","x2a","x3a"};
+	qg_X ( b[0] );
+ 	qg_X ( b[2] );
+ 	qg_X ( b[3] );
+ 	qg_X ( b[4] );
+ 	qg_PrepZ ( x[0] , 0 );
+ 	qg_PrepZ ( x[1] , 0 );
+ 	qg_PrepZ ( x[2] , 0 );
+ 	qg_PrepZ ( x[3] , 0 );
+ 	ToffoliImpl ( x[0] , b[1] , b[0] );
+ 	ToffoliImpl ( x[1] , x[0] , b[2] );
+ 	ToffoliImpl ( x[2] , x[1] , b[3] );
+ 	ToffoliImpl ( x[3] , x[2] , b[4] );
+ 	qg_CNOT ( t[0] , x[3] );
+ 	ToffoliImpl ( x[3] , x[2] , b[4] );
+ 	ToffoliImpl ( x[2] , x[1] , b[3] );
+ 	ToffoliImpl ( x[1] , x[0] , b[2] );
+ 	ToffoliImpl ( x[0] , b[1] , b[0] );
+ 	qg_X ( b[0] );
+ 	qg_X ( b[2] );
+ 	qg_X ( b[3] );
+ 	qg_X ( b[4] );
+ }
+
+int  main (  ) {
+char* a[5] = {"a0","a1","a2","a3","a4"};
+char* b[5] = {"b0","b1","b2","b3","b4"};
+char* t[1] = {"t0"};
+char* mt[1] = {"mt0"};
+char* ma[5] = {"ma0","ma1","ma2","ma3","ma4"};
+	qg_H ( a[0] );
+ 	qg_H ( a[1] );
+ 	qg_H ( a[2] );
+ 	qg_H ( a[3] );
+ 	qg_H ( a[4] );
+ 	Sqr ( a , b );
+ 	EQxMark_IP0_IPx_IPx_IPx_DPx_DPx_DPx_DPx ( b );
+ 	Sqr ( a , b );
+ 	diffuse ( a );
+ 	Sqr ( a , b );
+ 	EQxMark_IP0_IPx_IPx_IPx_DPx_DPx_DPx_DPx ( b );
+ 	Sqr ( a , b );
+ 	diffuse ( a );
+ 	Sqr ( a , b );
+ 	EQxMark_IP1_IPx_IPx_IPx_DPx_DPx_DPx_DPx ( b , t );
+ 	 qg_MeasZ ( t[0] );
+ 	 qg_MeasZ ( a[0] );
+ 	 qg_MeasZ ( a[1] );
+ 	 qg_MeasZ ( a[2] );
+ 	 qg_MeasZ ( a[3] );
+ 	 qg_MeasZ ( a[4] );
+ }
+

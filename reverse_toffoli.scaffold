@@ -1,0 +1,6 @@
+int main () {
+  qbit a, b, c;
+  Toffoli(a, b, c);
+  _reverse_Toffoli(a, b, c);
+  return 0;
+}
